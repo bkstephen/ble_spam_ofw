@@ -373,7 +373,7 @@ uint32_t bytes_to_int32(uint8_t* bytes, bool bigendian);
 */
 bool nrf24_check_connected(FuriHalSpiBusHandle* handle);
 
-void nrf24_send_single_ADV(FuriHalSpiBusHandle* handle, uint8_t srcmac, uint8_t channel, uint8_t packet);
+void nrf24_send_single_ADV(FuriHalSpiBusHandle* handle, uint8_t* srcmac, uint8_t* packet, uint8_t packetsize);
 
 #ifdef __cplusplus
 }

@@ -547,20 +547,23 @@ bool nrf24_check_connected(FuriHalSpiBusHandle* handle) {
     }
 }
 
-void nrf24_send_single_ADV(FuriHalSpiBusHandle* handle, uint8_t srcmac, uint8_t* packet, uint8_t* packetsize)
+void nrf24_send_single_ADV(FuriHalSpiBusHandle* handle, uint8_t* srcmac, uint8_t* packet, uint8_t packetsize)
 {	
     nrf24_init();
-    for (uint8_t channel = 0; channel < 125; channel++)
+    for (uint8_t channel = 0; channel < 120; channel++)
     {
-        nrf24_configure(
-            handle,
-            2,
-            srcmac,
-            NULL,
-            sizeof(srcmac),
-            channel,
-            true,
-            true);
+        // nrf24_configure(
+        //     handle,
+        //     2,
+        //     srcmac,
+        //     NULL,
+        //     sizeof(srcmac),
+        //     channel,
+        //     true,
+        //     true);
+        nrf24_set_src_mac(handle, srcmac, sizeof(srcmac));
+        nrf24_write_reg(handle, REG_RF_CH, channel);
+        nrf24_write_reg(handle, REG_RF_SETUP, 2);
         nrf24_txpacket(handle, packet, packetsize, false);
     }
     nrf24_flush_tx(handle);

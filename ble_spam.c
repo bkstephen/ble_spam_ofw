@@ -9,7 +9,7 @@
 #include <notification/notification.h>
 #include <notification/notification_messages.h>
 
-#include "lib/nrf24.h"
+#include <nrf24.h>
 
 // NAPI
 // TODO: Use __attribute__((aligned(2))) instead?
