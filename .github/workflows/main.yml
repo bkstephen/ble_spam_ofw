@@ -25,10 +25,17 @@ jobs:
           # skip SDK setup, we already did it in previous step
           skip-setup: true
           task: lint
-      - name: Publish GitHub Release Artifacts
-        uses: SierraSoftworks/gh-releases@v1.0.7
+      #- name: Publish GitHub Release Artifacts
+      #  uses: SierraSoftworks/gh-releases@v1.0.7
+      #  with:
+      #    files: ${{ steps.build-app.outputs.fap-artifacts }}
+      #    token: ${{ secrets.RELEASE_ACCESS }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
+          repo_token: "${{ secrets.RELEASE_ACCESS }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
           files: ${{ steps.build-app.outputs.fap-artifacts }}
-          token: ${{ secrets.RELEASE_ACCESS }}
 
           
