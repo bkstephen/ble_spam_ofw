@@ -28,7 +28,7 @@ jobs:
       - name: Publish GitHub Release Artifacts
         uses: SierraSoftworks/gh-releases@v1.0.7
         with:
-          files: |
-            - ${{ steps.build-app.outputs.fap-artifacts }}
+          files: ${{ steps.build-app.outputs.fap-artifacts }}
+          token: ${{ secrets.RELEASE_ACCESS }}
 
           
