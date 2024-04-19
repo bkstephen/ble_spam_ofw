@@ -9,6 +9,8 @@
 #include <notification/notification.h>
 #include <notification/notification_messages.h>
 
+#include <nrf24.h>
+
 // NAPI
 // TODO: Use __attribute__((aligned(2))) instead?
 // TODO: Use an offset of the base address?
@@ -388,14 +390,18 @@ static int32_t adv_thread(void* _ctx) {
         } else {
             protocols[rand() % protocols_count]->make_packet(&size, &packet, NULL);
         }
-        napi_furi_hal_bt_custom_adv_set(packet, size);
-        free(packet);
+        
+        //napi_furi_hal_bt_custom_adv_set(packet, size);
+
 
         if(payload->random_mac) furi_hal_random_fill_buf(mac, sizeof(mac));
         delay = delays[state->delay];
-        napi_furi_hal_bt_custom_adv_start(delay, delay, 0x00, mac, 0x1F);
+        nrf24_send_single_ADV(nrf24_HANDLE, mac, packet, size);
+        free(packet);
+
+        //napi_furi_hal_bt_custom_adv_start(delay, delay, 0x00, mac, 0x1F);
         furi_thread_flags_wait(true, FuriFlagWaitAny, delay);
-        napi_furi_hal_bt_custom_adv_stop();
+        //napi_furi_hal_bt_custom_adv_stop();
     }
 
     if(state->ctx.led_indicator) stop_blink(state);
